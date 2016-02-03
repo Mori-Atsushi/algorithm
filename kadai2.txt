@@ -1,0 +1,125 @@
+Script started on Mon Nov 30 01:26:24 2015
+[?1034hbash-3.2$ cat ringbuffer.c
+/* E1237 森篤史 */
+
+#include <stdio.h>
+
+#define MAX 5 //データ数
+
+/*iコマンド*/
+void i(int **h, int **t, int *r, int *d) {
+	int x;
+	int *tmp;
+	if(*t == d) {
+		*h = r;
+		*t = r;
+	} else {
+		tmp = r + ((*t - r + 1) % MAX);
+		if(tmp == *h) {
+			printf("キューが満杯です。\n");
+			return ;
+		}
+		*t = tmp;
+	}
+	printf("入力データ：");
+	scanf(" %d", &x);
+	**t = x;
+	return;
+}
+
+/*dコマンド*/
+void d(int **h, int **t, int *r, int *d) {
+	int *tmp;
+	if(*h == d) {
+		printf("キューが空です。\n");
+		return;
+	}
+
+	if(*h == *t) {
+		*h = d;
+		*t = d;
+	} else {
+		*h = r + ((*h - r + 1) % MAX);
+	}
+}
+
+/*pコマンド*/
+void p(int *h, int *t, int *r, int *d) {
+	int *tmp;
+	int i;
+	if(h == d) {
+		printf("キューが空です。\n");
+		return;
+	}
+	if(h == t) {
+		printf("%d, \n", *h);
+		return;
+	}
+	for(i = 0; i < 5; i++) {
+		tmp = r + ((h - r + i) % MAX);
+		printf("%d, ", *tmp);	
+		if(tmp == t)
+			break;
+	}
+	printf("\n");
+}
+
+int main(void) {
+	int ring[MAX], dummy; //データ
+	int *head = &dummy, *tail = &dummy; //リングバッファの現在地
+	char c;
+
+	while(1) {
+		printf("コマンド：");
+		scanf(" %c", &c);
+		switch(c) {
+			case 'i':
+				i(&head, &tail, ring, &dummy);
+				break;
+			case 'd':
+				d(&head, &tail, ring, &dummy);
+				break;
+			case 'p':
+				p(head, tail, ring, &dummy);
+				break;
+			case 'q':
+				return 0;
+			default :
+				printf("i,d,p,qのいずれかを入力してください。\n");
+		}
+	}
+	return 0;
+}bash-3.2$ gcc ringbuffer.c
+bash-3.2$ ./a.out
+コマンド：p
+キューが空です。
+コマンド：i
+入力データ：1
+コマンド：i
+入力データ：2
+コマンド：i
+入力データ：3
+コマンド：i
+入力データ：4
+コマンド：i
+入力データ：5
+コマンド：p
+1, 2, 3, 4, 5, 
+コマンド：i
+キューが満杯です。
+コマンド：d
+コマンド：p
+2, 3, 4, 5, 
+コマンド：d
+コマンド：d
+コマンド：d
+コマンド：d
+コマンド：d
+キューが空です。
+コマンド：p
+キューが空です。
+コマンド：q
+bash-3.2$ exit
+exit
+
+Script done on Mon Nov 30 01:27:00 2015
