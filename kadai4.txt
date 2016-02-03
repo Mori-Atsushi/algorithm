@@ -1,0 +1,38 @@
+Script started on Mon Dec 28 20:50:24 2015
+[?1034hbash-3.2$ cat fibonacci.c
+/* E1237 森篤史 */
+
+#include <stdio.h>
+
+int fibonacci(int x) {
+	if(x == 0)
+		return 0;
+	else if(x == 1)
+		return 1;
+	return fibonacci(x - 1) + fibonacci(x - 2);
+}
+
+int main(void) {
+	int x;
+
+	scanf(" %d", &x);
+	printf("%d\n", fibonacci(x));
+
+	return 0;
+}bash-3.2$ gcc fibonacci.c
+bash-3.2$ ./a.out
+0
+0
+bash-3.2$ ./a.out
+1
+1
+bash-3.2$ ./a.out
+10
+55
+bash-3.2$ ./a.out
+46
+1836311903
+bash-3.2$ exit
+exit
+
+Script done on Mon Dec 28 20:51:28 2015
